@@ -4,7 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -16,13 +16,12 @@ import java.util.Optional;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
-
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -40,14 +39,6 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encodedPassword);
         userRepository.save(user);
         logger.info("User saved: {}", user.getEmail());
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        logger.info("Fetching all users...");
-        List<User> users = userRepository.findAll();
-        logger.info("Fetched {} users", users.size());
-        return users;
     }
 
     @Override
@@ -71,6 +62,15 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.save(existingUser);
         logger.info("User updated: {}", user.getEmail());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<User> getAllUsers() {
+        logger.info("Fetching all users...");
+        List<User> users = userRepository.findAll();
+        logger.info("Fetched {} users", users.size());
+        return users;
     }
 
     @Override

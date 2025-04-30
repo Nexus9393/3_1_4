@@ -11,6 +11,7 @@ import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Component
@@ -30,10 +31,6 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        logger.info("Clearing existing users and roles...");
-        userRepository.deleteAll();
-        roleRepository.deleteAll();
-
         logger.info("Initializing roles...");
         Role adminRole = initializeRole("ADMIN");
         Role userRole = initializeRole("USER");
@@ -67,14 +64,13 @@ public class DatabaseInitializer implements CommandLineRunner {
     }
 
     private Role initializeRole(String roleName) {
-        Role role = roleRepository.findByName(roleName);
-        if (role == null) {
+        Optional<Role> roleOptional = roleRepository.findByName(roleName);
+        Role role = roleOptional.orElseGet(() -> {
             logger.info("Creating role: {}", roleName);
-            role = new Role(roleName);
-            roleRepository.save(role);
-        } else {
-            logger.info("Role already exists: {}", roleName);
-        }
+            Role newRole = new Role();
+            newRole.setName(roleName);
+            return roleRepository.save(newRole);
+        });
         logger.info("Role created/found: {} with ID: {}", roleName, role.getId());
         return role;
     }

@@ -1,6 +1,5 @@
 package ru.kata.spring.boot_security.demo.security;
 
-import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,10 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                     return new UsernameNotFoundException("User not found with email: " + email);
                 });
         logger.info("User found: {}, password: {}", user.getEmail(), user.getPassword());
-
-        Hibernate.initialize(user.getRoles());
         logger.info("User roles: {}", user.getRoles());
-
         logger.info("User authenticated: {}", user.getEmail());
         return user;
     }

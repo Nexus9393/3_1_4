@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
-<div class="col-md-2 sidebar">
-    <a th:href="@{/admin}"><i class="fas fa-user-shield"></i> Admin</a>
-    <a th:href="@{/user}"><i class="fas fa-user"></i> User</a>
+<div th:fragment="body" class="col-md-2 sidebar">
+    <a href="#" data-page="admin"><i class="fas fa-user-shield"></i> Admin</a>
+    <a href="#" data-page="user"><i class="fas fa-user"></i> User</a>
 </div>
 </body>
 </html>
