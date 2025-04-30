@@ -1,9 +1,35 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <style>
+        .sidebar {
+            background-color: #e9ecef;
+            padding: 20px;
+            height: 100vh;
+        }
+        .sidebar a {
+            display: block;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .sidebar a:hover {
+            background-color: #ddd;
+        }
+        .sidebar a.active {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+    </style>
+</head>
 <body>
-<div th:fragment="body" class="col-md-2 sidebar">
-    <a href="#" data-page="admin"><i class="fas fa-user-shield"></i> Admin</a>
-    <a href="#" data-page="user"><i class="fas fa-user"></i> User</a>
+<div th:fragment="sidebar">
+    <div class="sidebar" sec:authorize="isAuthenticated()">
+        <a href="#" data-page="admin" id="adminTab"><i class="fas fa-user-shield"></i> Admin</a>
+        <a href="#" data-page="user" id="userTab"><i class="fas fa-user"></i> User</a>
+    </div>
 </div>
 </body>
 </html>

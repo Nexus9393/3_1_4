@@ -1,13 +1,37 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <style>
+        .navbar {
+            background-color: #000000;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar #authInfo {
+            color: #ffffff;
+        }
+        .navbar a#logoutLink {
+            background-color: #6c757d;
+            color: #d3d3d3 !important;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: none;
+        }
+        .navbar a#logoutLink:hover {
+            background-color: #5a6268;
+            color: #d3d3d3 !important;
+        }
+    </style>
+</head>
 <body>
-<nav th:fragment="body" class="navbar">
-    <span th:if="${#authentication.principal != null}">
-        <span th:text="${#authentication.principal.username} + ' with roles: '"></span>
-        <span th:each="authority, iterStat : ${#authentication.principal.authorities}" th:text="${authority} + (${!iterStat.last} ? ', ' : '')"></span>
-    </span>
-    <span th:if="${#authentication.principal == null}">Not authenticated</span>
-    <a th:href="@{/logout}">Logout</a>
-</nav>
+<div th:fragment="header">
+    <nav class="navbar" sec:authorize="isAuthenticated()">
+        <span id="authInfo"></span>
+        <a href="/logout" id="logoutLink">Logout</a>
+    </nav>
+</div>
 </body>
 </html>
